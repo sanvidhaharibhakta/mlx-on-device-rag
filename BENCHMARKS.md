@@ -57,3 +57,31 @@ Helpfulness eval (5 in-corpus questions):
 Key insight: Prompt engineering alone plateaued ~60% honesty on small models.
 Retrieval-score thresholding (defense in depth) reached 100% on both axes
 by short-circuiting weak retrievals before they reach the LLM.
+
+## 2026-05-22 — Quantization sweep (Llama-3.2-1B-Instruct on MLX)
+Hardware: MacBook Air, Apple Silicon (no fan)
+Method: 5 prompts × 3 timed runs per model, max_tokens=150, median reported
+
+Quant | Gen tok/s | Peak Mem (GB) | Speed Δ | Memory Δ
+4-bit |   120.3   |     0.80      |  3.13×  |  0.32×
+8-bit |    70.3   |     1.42      |  1.83×  |  0.56×
+bf16  |    38.5   |     2.54      |  1.00×  |  1.00×
+
+Key finding: ~linear scaling between weight size and throughput,
+consistent with memory-bandwidth-bound inference on Apple Silicon.
+Quality impact: TBD (see eval below).
+
+## 2026-05-22 — Thermal characterization (4-bit, 19 min sustained)
+Hardware: MacBook Air, Apple Silicon, no fan, no charger
+Test: continuous generation, ~200 tokens per call, no cooldown
+
+Peak (min 0):         123 tok/s (median, low-variance)
+Steady median:        ~115 tok/s (93% of peak), sustained
+Tail variance:        worst-case dips to 75 tok/s in later minutes
+Throttling pattern:   median holds, variance widens
+                      (dynamic V/F scaling preserves mean throughput)
+
+Deployment implication:
+  Single-shot benchmarks overstate user-perceived throughput
+  for sustained workloads. Real on-device chat experience
+  should budget against the p95 tail (~95 tok/s), not the peak.

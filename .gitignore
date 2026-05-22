@@ -1,4 +1,27 @@
+# Python
 venv/
 __pycache__/
-*.npz
+*.pyc
+.python-version
+
+# Generated artifacts
+index.npz
 index_meta.json
+benchmark_*.json
+eval_quants_*.json
+thermal_test_*.json
+*.log
+
+# OS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Cache
+.cache/
+docs/
+
+# Keep charts
+!chart_*.png
