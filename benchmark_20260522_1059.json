@@ -1,0 +1,26 @@
+{
+  "model": "mlx-community/Llama-3.2-1B-Instruct-4bit",
+  "peak_mem_mb": 611.65625,
+  "results": [
+    {
+      "prompt": "Explain the concept of transformers in machine lea",
+      "sample_response": "**Transformers in Machine Learning**\n\nTransformers are a type of neural network architecture that has revolutionized the field of machine learning. Introduced in 2017 by Google's DeepMind, transformer"
+    },
+    {
+      "prompt": "What is retrieval-augmented generation?",
+      "sample_response": "Retrieval-Augmented Generation (RAG) is a type of language model training that combines the strengths of both retrieval-based and augmented generation methods.\n\n**Retrieval-based Generation:**\n\nIn ret"
+    },
+    {
+      "prompt": "Write a short poem about the ocean.",
+      "sample_response": "Deep blue waves, a soothing sight\nThe ocean's roar, a gentle might\nTides rise high, and tides fall low\nA mysterious world, where secrets grow\n\nThe sun sets low, in a fiery glow\nThe stars appear, in a "
+    },
+    {
+      "prompt": "Summarize the key ideas of object-oriented program",
+      "sample_response": "Object-Oriented Programming (OOP) is a programming paradigm that revolves around the concept of objects and classes. Here are the key ideas of OOP:\n\n**1. Classes and Objects**\n\n* A class is a blueprin"
+    },
+    {
+      "prompt": "What are the tradeoffs of model quantization?",
+      "sample_response": "Model quantization is a technique used to reduce the number of parameters in a neural network or a model while preserving its accuracy. The tradeoffs of model quantization are:\n\n1. **Loss of accuracy*"
+    }
+  ]
+}
