@@ -12,12 +12,13 @@ LLM_MODEL = "mlx-community/Llama-3.2-1B-Instruct-4bit"
 TOP_K = 4  # number of chunks to retrieve
 RETRIEVAL_THRESHOLD = 0.45  # below this, we refuse without calling the LLM
 
-PROMPT_TEMPLATE = """You are a document Q&A assistant. Answer the user's question using ONLY the provided context.
+PROMPT_TEMPLATE = """You are a document Q&A assistant. Use ONLY the provided context to answer.
 
-How to answer:
-- If the CONTEXT contains information that answers the question, answer it clearly and cite which source(s) you used.
-- If the CONTEXT does not contain the answer, respond with exactly: "I cannot answer this from the provided documents."
-- Do not use outside knowledge. Do not guess facts not in the context.
+Rules:
+- If the context contains the answer, give a clear, complete answer and stop.
+- If the context does NOT contain the answer, respond with this exact sentence and nothing else: I cannot answer this from the provided documents.
+- Do not combine an answer with a refusal. Pick one.
+- Do not use outside knowledge.
 
 CONTEXT:
 {context}
@@ -75,6 +76,16 @@ class RAGPipeline:
                 print(f"\n💬 Answer:\n==========")
                 print("I cannot answer this from the provided documents.")
                 print("==========")
+                # Defense-in-depth: strip trailing/leading refusal artifacts if the model
+        # produced a real answer AND tacked on the refusal phrase
+                REFUSAL = "I cannot answer this from the provided documents."
+                cleaned = response.strip()
+        # If the response contains a real answer plus the refusal phrase,
+        # keep whichever is dominant
+                if REFUSAL in cleaned and len(cleaned) > len(REFUSAL) + 20:
+            # There's substantive content beyond the refusal phrase — remove the refusal
+                    cleaned = cleaned.replace(REFUSAL, "").strip()
+                    response = cleaned
             return {
                 "answer": "I cannot answer this from the provided documents.",
                 "retrieved": retrieved,
